@@ -47,19 +47,35 @@
                 </button>
                 <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li>
-                            <a runat="server" href="~/Login.aspx">Login</a>
-                        </li>
-                        <li>
-                            <a runat="server" href="~/Inicio.aspx">Inicio</a>
-                        </li>
-                        <li>
-                            <a runat="server" href="~/Clientes.aspx">Clientes</a>
-                        </li>
-                        <li>
-                            <a runat="server" href="~/Bitacoras.aspx">Bitácora</a>
-                        </li>
+                        <asp:PlaceHolder ID="phMenuLogin" runat="server">
+                            <li class="nav-item">
+                                <a class="nav-link" runat="server" href="~/Login.aspx">Login</a>
+                            </li>
+                        </asp:PlaceHolder>
+
+                        <asp:PlaceHolder ID="phMenuPrivado" runat="server">
+                            <li class="nav-item">
+                                <a class="nav-link" runat="server" href="~/Inicio.aspx">Inicio</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" runat="server" href="~/Clientes.aspx">Clientes</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" runat="server" href="~/Bitacoras.aspx">Bitácoras</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" runat="server" href="~/Logout.aspx">Cerrar sesión</a>
+                            </li>
+                        </asp:PlaceHolder>
                     </ul>
+
+                    <asp:Label 
+                        ID="lblUsuarioSesion" 
+                        runat="server" 
+                        CssClass="navbar-text" />
                 </div>
             </div>
         </nav>
