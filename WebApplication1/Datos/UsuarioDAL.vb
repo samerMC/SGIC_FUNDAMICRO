@@ -8,10 +8,11 @@ Public Class UsuarioDAL
             Return Nothing
         End If
 
-        Const consulta As String =
-            "SELECT IdUsuario, NombreUsuario, NombreCompleto, PasswordHash, PasswordSalt, Estado, FechaCreacion, FechaUltimoAcceso " &
-            "FROM dbo.Usuarios " &
-            "WHERE NombreUsuario = @NombreUsuario;"
+        Const consulta As String = "SELECT U.IdUsuario, U.IdRol, R.NombreRol, U.NombreUsuario, U.NombreCompleto, U.Correo, " &
+            "U.PasswordHash, U.PasswordSalt, U.Estado, U.FechaCreacion, U.FechaUltimoAcceso " &
+            "FROM dbo.Usuarios U " &
+            "INNER JOIN dbo.Roles R ON R.IdRol = U.IdRol " &
+            "WHERE U.NombreUsuario = @NombreUsuario;"
 
         Using conexion As SqlConnection = ConexionBD.ObtenerConexion()
             Using comando As New SqlCommand(consulta, conexion)
@@ -31,6 +32,9 @@ Public Class UsuarioDAL
                         .NombreCompleto = Convert.ToString(lector("NombreCompleto")),
                         .PasswordHash = Convert.ToString(lector("PasswordHash")),
                         .PasswordSalt = Convert.ToString(lector("PasswordSalt")),
+                        .IdRol = Convert.ToInt32(lector("IdRol")),
+                        .NombreRol = Convert.ToString(lector("NombreRol")),
+                        .Correo = If(lector("Correo") Is DBNull.Value, String.Empty, Convert.ToString(lector("Correo"))),
                         .Estado = Convert.ToBoolean(lector("Estado")),
                         .FechaCreacion = Convert.ToDateTime(lector("FechaCreacion"))
                     }

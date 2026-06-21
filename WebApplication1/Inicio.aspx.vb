@@ -5,6 +5,8 @@
         If Not SesionHelper.ValidarAcceso() Then
             Return
         End If
+
+        phUsuariosAdmin.Visible = SesionHelper.UsuarioEsAdministrador()
     End Sub
 
 End Class

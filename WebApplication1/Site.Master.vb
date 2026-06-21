@@ -10,6 +10,7 @@
 
         phMenuLogin.Visible = Not sesionActiva
         phMenuPrivado.Visible = sesionActiva
+        phMenuUsuarios.Visible = sesionActiva AndAlso SesionHelper.UsuarioEsAdministrador()
 
         If sesionActiva Then
             lblUsuarioSesion.Text = SesionHelper.ObtenerNombreCompleto()

@@ -58,6 +58,12 @@
                                 <a class="nav-link" runat="server" href="~/Inicio.aspx">Inicio</a>
                             </li>
 
+                            <asp:PlaceHolder ID="phMenuUsuarios" runat="server">
+                                <li class="nav-item">
+                                    <a class="nav-link" runat="server" href="~/Usuarios.aspx">Usuarios</a>
+                                </li>
+                            </asp:PlaceHolder>
+
                             <li class="nav-item">
                                 <a class="nav-link" runat="server" href="~/Clientes.aspx">Clientes</a>
                             </li>

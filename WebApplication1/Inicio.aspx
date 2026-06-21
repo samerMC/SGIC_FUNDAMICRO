@@ -24,6 +24,16 @@
                     Ver bitácora
                 </a>
             </article>
+
+            <asp:PlaceHolder ID="phUsuariosAdmin" runat="server">
+                <article class="dashboard-card">
+                    <h2>Usuarios</h2>
+                    <p>Permite crear, editar, activar y desactivar usuarios del sistema.</p>
+                    <a class="btn btn-secondary" href="<%= ResolveUrl("~/Usuarios.aspx") %>">
+                        Ir a usuarios
+                    </a>
+                </article>
+            </asp:PlaceHolder>
         </section>
     </main>
 </asp:Content>

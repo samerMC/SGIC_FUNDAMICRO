@@ -66,4 +66,14 @@ Public NotInheritable Class PasswordHelper
         Return diferencia = 0
     End Function
 
+    Public Shared Function GenerarSalt() As String
+        Dim bytesSalt(31) As Byte
+
+        Using generador As RandomNumberGenerator = RandomNumberGenerator.Create()
+            generador.GetBytes(bytesSalt)
+        End Using
+
+        Return Convert.ToBase64String(bytesSalt)
+    End Function
+
 End Class
