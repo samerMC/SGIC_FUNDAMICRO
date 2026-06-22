@@ -32,7 +32,7 @@
                 <asp:Label 
                     ID="lblMensaje" 
                     runat="server" 
-                    CssClass="validation-message" 
+                    CssClass="app-message" 
                     EnableViewState="false" />
 
                 <div class="form-actions">

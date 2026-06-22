@@ -11,6 +11,7 @@
             <h2>Datos del usuario</h2>
 
             <asp:HiddenField ID="hfIdUsuario" runat="server" />
+            <asp:HiddenField ID="hfIdUsuarioCambiarEstado" runat="server" />
 
             <div class="form-grid">
                 <div class="form-group">
@@ -52,7 +53,7 @@
                 Al editar un usuario, deje la contraseña vacía si no desea cambiarla.
             </p>
 
-            <asp:Label ID="lblMensaje" runat="server" CssClass="validation-message" EnableViewState="false" />
+            <asp:Label ID="lblMensaje" runat="server" CssClass="app-message" EnableViewState="false" />
 
             <div class="form-actions">
                 <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-primary" />
@@ -80,25 +81,79 @@
 
                     <asp:TemplateField HeaderText="Acciones">
                         <ItemTemplate>
-                            <asp:LinkButton
-                                ID="lnkEditar"
-                                runat="server"
-                                Text="Editar"
-                                CommandName="EditarUsuario"
-                                CommandArgument='<%# Eval("IdUsuario") %>' />
+                            <div class="table-actions">
+                                <asp:LinkButton
+                                    ID="lnkEditar"
+                                    runat="server"
+                                    Text="Editar"
+                                    CommandName="EditarUsuario"
+                                    CommandArgument='<%# Eval("IdUsuario") %>'
+                                    CssClass="action-link action-edit" />
 
-                            <asp:LinkButton
-                                ID="lnkCambiarEstado"
-                                runat="server"
-                                Text='<%# Eval("AccionEstadoTexto") %>'
-                                CommandName="CambiarEstado"
-                                CommandArgument='<%# Eval("IdUsuario") %>'
-                                CssClass="danger-link"
-                                OnClientClick="return confirm('¿Confirma cambiar el estado de este usuario?');" />
+                                <asp:LinkButton
+                                    ID="lnkCambiarEstado"
+                                    runat="server"
+                                    Text='<%# Eval("AccionEstadoTexto") %>'
+                                    CommandName="CambiarEstadoModal"
+                                    CommandArgument='<%# Eval("IdUsuario") %>'
+                                    CssClass='<%# If(CBool(Eval("Estado")), "action-link action-danger", "action-link action-success") %>'
+                                    OnClientClick='<%# String.Format("mostrarModalCambiarEstadoUsuario({0}); return false;", Eval("IdUsuario")) %>' />
+                            </div>
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
             </asp:GridView>
         </section>
+        <asp:Button
+            ID="btnConfirmarCambiarEstado"
+            runat="server"
+            Text="Confirmar cambio de estado"
+            Style="display:none;"
+            CausesValidation="false" />
     </main>
+    <div id="modalCambiarEstadoUsuario" class="app-modal-overlay" aria-hidden="true">
+        <div class="app-modal" role="dialog" aria-modal="true" aria-labelledby="modalCambiarEstadoUsuarioTitulo">
+            <h2 id="modalCambiarEstadoUsuarioTitulo">Confirmar cambio de estado</h2>
+
+            <p>
+                ¿Confirma que desea cambiar el estado de este usuario?
+            </p>
+
+            <p class="form-hint">
+                Esta acción puede activar o desactivar el acceso del usuario al sistema.
+            </p>
+
+            <div class="app-modal-actions">
+                <button type="button" class="btn btn-danger" onclick="confirmarCambiarEstadoUsuario();">
+                    Confirmar
+                </button>
+
+                <button type="button" class="btn btn-secondary" onclick="cerrarModalCambiarEstadoUsuario();">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function mostrarModalCambiarEstadoUsuario(idUsuario) {
+            document.getElementById('<%= hfIdUsuarioCambiarEstado.ClientID %>').value = idUsuario;
+
+            const modal = document.getElementById('modalCambiarEstadoUsuario');
+            modal.classList.add('is-visible');
+            modal.setAttribute('aria-hidden', 'false');
+        }
+
+        function cerrarModalCambiarEstadoUsuario() {
+            const modal = document.getElementById('modalCambiarEstadoUsuario');
+            modal.classList.remove('is-visible');
+            modal.setAttribute('aria-hidden', 'true');
+
+            document.getElementById('<%= hfIdUsuarioCambiarEstado.ClientID %>').value = '';
+        }
+
+        function confirmarCambiarEstadoUsuario() {
+            document.getElementById('<%= btnConfirmarCambiarEstado.ClientID %>').click();
+        }
+    </script>
 </asp:Content>

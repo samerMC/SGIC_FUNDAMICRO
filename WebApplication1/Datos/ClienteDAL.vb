@@ -30,6 +30,7 @@ Public Class ClienteDAL
         Return clientes
     End Function
 
+    ' Este método se puede usar para obtener un cliente específico, por ejemplo, para editarlo o mostrar sus detalles.
     Public Function ObtenerPorId(idCliente As Integer) As Cliente
         Const consulta As String =
             "SELECT IdCliente, Nombre, Apellido, Dui, Nit, Telefono, Correo, Direccion, Estado, " &
@@ -129,6 +130,7 @@ Public Class ClienteDAL
         End Using
     End Sub
 
+    ' Eliminación lógica: se marca el cliente como inactivo en lugar de eliminarlo físicamente de la base de datos.
     Public Sub EliminarLogico(idCliente As Integer, idUsuarioSesion As Integer)
         Const consulta As String =
             "UPDATE dbo.Clientes SET " &
@@ -150,6 +152,7 @@ Public Class ClienteDAL
         End Using
     End Sub
 
+    ' Este método se puede usar para reactivar un cliente que fue eliminado lógicamente.
     Private Shared Sub AgregarParametrosCliente(comando As SqlCommand, cliente As Cliente)
         comando.Parameters.Add("@Nombre", SqlDbType.NVarChar, 100).Value = cliente.Nombre.Trim()
         comando.Parameters.Add("@Apellido", SqlDbType.NVarChar, 100).Value = cliente.Apellido.Trim()
@@ -160,6 +163,7 @@ Public Class ClienteDAL
         comando.Parameters.Add("@Direccion", SqlDbType.NVarChar, 250).Value = ObtenerValorNullable(cliente.Direccion)
     End Sub
 
+    ' Este método convierte una cadena vacía o nula en DBNull.Value para que se pueda almacenar correctamente en la base de datos.
     Private Shared Function ObtenerValorNullable(valor As String) As Object
         If String.IsNullOrWhiteSpace(valor) Then
             Return DBNull.Value
@@ -168,6 +172,7 @@ Public Class ClienteDAL
         Return valor.Trim()
     End Function
 
+    ' Mapea un registro del SqlDataReader a un objeto Cliente, manejando posibles valores nulos para campos opcionales.
     Private Shared Function MapearCliente(lector As SqlDataReader) As Cliente
         Dim cliente As New Cliente With {
             .IdCliente = Convert.ToInt32(lector("IdCliente")),

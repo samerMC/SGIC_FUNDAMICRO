@@ -1,5 +1,4 @@
-﻿Imports System.Text.RegularExpressions
-Imports System.Web.UI.WebControls
+﻿Imports System.Web.UI.WebControls
 
 Public Class Clientes
     Inherits System.Web.UI.Page
@@ -71,6 +70,7 @@ Public Class Clientes
         PrepararNuevoCliente()
     End Sub
 
+    ' Este evento se dispara cuando se hace clic en los botones de editar o eliminar dentro del GridView. Se identifica el cliente seleccionado a través del CommandArgument, que contiene el IdCliente.
     Protected Sub gvClientes_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvClientes.RowCommand
         Dim idCliente As Integer
 
@@ -141,28 +141,43 @@ Public Class Clientes
     End Sub
 
     Private Function DatosValidos() As Boolean
-        If String.IsNullOrWhiteSpace(txtNombre.Text) Then
-            MostrarMensaje("Debe ingresar el nombre del cliente.", True)
+        If Not ValidacionHelper.TextoObligatorio(txtNombre.Text) Then
+            MensajeHelper.Advertencia(lblMensaje, "Debe ingresar el nombre del cliente.")
             Return False
         End If
 
-        If String.IsNullOrWhiteSpace(txtApellido.Text) Then
-            MostrarMensaje("Debe ingresar el apellido del cliente.", True)
+        If Not ValidacionHelper.TextoObligatorio(txtApellido.Text) Then
+            MensajeHelper.Advertencia(lblMensaje, "Debe ingresar el apellido del cliente.")
             Return False
         End If
 
-        If Not String.IsNullOrWhiteSpace(txtDui.Text) AndAlso Not DuiValido(txtDui.Text) Then
-            MostrarMensaje("El DUI debe tener el formato 00000000-0.", True)
+        If Not ValidacionHelper.LongitudMaxima(txtNombre.Text, 100) Then
+            MensajeHelper.Advertencia(lblMensaje, "El nombre no debe superar los 100 caracteres.")
             Return False
         End If
 
-        If Not String.IsNullOrWhiteSpace(txtCorreo.Text) AndAlso Not CorreoValido(txtCorreo.Text) Then
-            MostrarMensaje("Debe ingresar un correo electrónico válido.", True)
+        If Not ValidacionHelper.LongitudMaxima(txtApellido.Text, 100) Then
+            MensajeHelper.Advertencia(lblMensaje, "El apellido no debe superar los 100 caracteres.")
             Return False
         End If
 
-        If Not String.IsNullOrWhiteSpace(txtTelefono.Text) AndAlso Not TelefonoValido(txtTelefono.Text) Then
-            MostrarMensaje("El teléfono contiene caracteres no válidos.", True)
+        If Not ValidacionHelper.DuiValido(txtDui.Text) Then
+            MensajeHelper.Advertencia(lblMensaje, "El DUI debe tener el formato 00000000-0.")
+            Return False
+        End If
+
+        If Not ValidacionHelper.TelefonoValido(txtTelefono.Text) Then
+            MensajeHelper.Advertencia(lblMensaje, "El teléfono contiene caracteres no válidos.")
+            Return False
+        End If
+
+        If Not ValidacionHelper.CorreoValido(txtCorreo.Text) Then
+            MensajeHelper.Advertencia(lblMensaje, "Debe ingresar un correo electrónico válido.")
+            Return False
+        End If
+
+        If Not ValidacionHelper.LongitudMaxima(txtDireccion.Text, 250) Then
+            MensajeHelper.Advertencia(lblMensaje, "La dirección no debe superar los 250 caracteres.")
             Return False
         End If
 
@@ -193,6 +208,7 @@ Public Class Clientes
         Return 0
     End Function
 
+    ' Este método limpia los campos del formulario para preparar la creación de un nuevo cliente después de guardar o cancelar una edición.
     Private Sub PrepararNuevoCliente()
         hfIdCliente.Value = String.Empty
         txtNombre.Text = String.Empty
@@ -204,26 +220,16 @@ Public Class Clientes
         txtDireccion.Text = String.Empty
     End Sub
 
-    Private Function DuiValido(dui As String) As Boolean
-        Return Regex.IsMatch(dui.Trim(), "^\d{8}-\d$")
-    End Function
-
-    Private Function CorreoValido(correo As String) As Boolean
-        Return Regex.IsMatch(correo.Trim(), "^[^@\s]+@[^@\s]+\.[^@\s]+$")
-    End Function
-
-    Private Function TelefonoValido(telefono As String) As Boolean
-        Return Regex.IsMatch(telefono.Trim(), "^[0-9+\-\s]{7,20}$")
-    End Function
-
     Private Sub MostrarMensaje(mensaje As String, esError As Boolean)
-        lblMensaje.Text = mensaje
-        lblMensaje.CssClass = If(esError, "validation-message", "success-message")
+        If esError Then
+            MensajeHelper.ErrorSistema(lblMensaje, mensaje)
+        Else
+            MensajeHelper.Exito(lblMensaje, mensaje)
+        End If
     End Sub
 
     Private Sub LimpiarMensaje()
-        lblMensaje.Text = String.Empty
-        lblMensaje.CssClass = "validation-message"
+        MensajeHelper.Limpiar(lblMensaje)
     End Sub
 
     Private Sub RegistrarBitacora(accion As String, idCliente As Integer, detalle As String)
@@ -248,5 +254,16 @@ Public Class Clientes
 
         Return Request.UserHostAddress
     End Function
+
+    Protected Sub btnConfirmarEliminar_Click(sender As Object, e As EventArgs) Handles btnConfirmarEliminar.Click
+        Dim idCliente As Integer
+
+        If Not Integer.TryParse(hfIdClienteEliminar.Value, idCliente) Then
+            MostrarMensaje("No fue posible identificar el cliente seleccionado.", True)
+            Return
+        End If
+
+        EliminarCliente(idCliente)
+    End Sub
 
 End Class

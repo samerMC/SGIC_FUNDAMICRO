@@ -7,6 +7,7 @@ Public NotInheritable Class PasswordHelper
         ' Evita crear instancias de esta clase.
     End Sub
 
+    ' Este método genera un hash SHA-256 a partir de la contraseña y el salt proporcionados.
     Public Shared Function GenerarHash(contrasena As String, salt As String) As String
         If contrasena Is Nothing Then
             contrasena = String.Empty
@@ -42,6 +43,7 @@ Public NotInheritable Class PasswordHelper
         Return CompararTextoSeguro(hashCalculado, hashAlmacenado)
     End Function
 
+    ' Este método compara dos cadenas de texto de manera segura para evitar ataques de temporización. Devuelve true si las cadenas son iguales, ignorando mayúsculas y minúsculas.
     Private Shared Function CompararTextoSeguro(valorA As String, valorB As String) As Boolean
         If valorA Is Nothing OrElse valorB Is Nothing Then
             Return False
@@ -66,6 +68,7 @@ Public NotInheritable Class PasswordHelper
         Return diferencia = 0
     End Function
 
+    ' El salt se utiliza para agregar aleatoriedad a la contraseña antes de generar el hash, lo que ayuda a proteger contra ataques de diccionario y rainbow tables.
     Public Shared Function GenerarSalt() As String
         Dim bytesSalt(31) As Byte
 

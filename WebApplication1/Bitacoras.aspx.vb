@@ -31,8 +31,12 @@
 
     Private Sub CargarBitacoras()
         Try
-            Dim fechaDesde As DateTime? = ObtenerFecha(txtFechaDesde.Text)
-            Dim fechaHasta As DateTime? = ObtenerFecha(txtFechaHasta.Text)
+            Dim fechaDesde As DateTime? = Nothing
+            Dim fechaHasta As DateTime? = Nothing
+
+            ValidacionHelper.TryObtenerFechaOpcional(txtFechaDesde.Text, fechaDesde)
+            ValidacionHelper.TryObtenerFechaOpcional(txtFechaHasta.Text, fechaHasta)
+
             Dim accion As String = ddlAccion.SelectedValue
             Dim usuario As String = txtUsuarioFiltro.Text.Trim()
 
@@ -40,44 +44,31 @@
             gvBitacoras.DataBind()
 
         Catch ex As Exception
-            MostrarMensaje("No fue posible cargar la bitácora. Intente nuevamente.")
+            MensajeHelper.ErrorSistema(lblMensaje, "No fue posible cargar la bitácora. Intente nuevamente.")
         End Try
     End Sub
 
+    ' Este método valida que las fechas ingresadas sean correctas y que la fecha desde no sea mayor que la fecha hasta.
     Private Function FiltrosValidos() As Boolean
-        Dim fechaDesde As DateTime? = ObtenerFecha(txtFechaDesde.Text)
-        Dim fechaHasta As DateTime? = ObtenerFecha(txtFechaHasta.Text)
+        Dim fechaDesde As DateTime? = Nothing
+        Dim fechaHasta As DateTime? = Nothing
 
-        If Not String.IsNullOrWhiteSpace(txtFechaDesde.Text) AndAlso Not fechaDesde.HasValue Then
-            MostrarMensaje("La fecha desde no tiene un formato válido.")
+        If Not ValidacionHelper.TryObtenerFechaOpcional(txtFechaDesde.Text, fechaDesde) Then
+            MensajeHelper.Advertencia(lblMensaje, "La fecha desde no tiene un formato válido.")
             Return False
         End If
 
-        If Not String.IsNullOrWhiteSpace(txtFechaHasta.Text) AndAlso Not fechaHasta.HasValue Then
-            MostrarMensaje("La fecha hasta no tiene un formato válido.")
+        If Not ValidacionHelper.TryObtenerFechaOpcional(txtFechaHasta.Text, fechaHasta) Then
+            MensajeHelper.Advertencia(lblMensaje, "La fecha hasta no tiene un formato válido.")
             Return False
         End If
 
         If fechaDesde.HasValue AndAlso fechaHasta.HasValue AndAlso fechaDesde.Value.Date > fechaHasta.Value.Date Then
-            MostrarMensaje("La fecha desde no puede ser mayor que la fecha hasta.")
+            MensajeHelper.Advertencia(lblMensaje, "La fecha desde no puede ser mayor que la fecha hasta.")
             Return False
         End If
 
         Return True
-    End Function
-
-    Private Function ObtenerFecha(valor As String) As DateTime?
-        If String.IsNullOrWhiteSpace(valor) Then
-            Return Nothing
-        End If
-
-        Dim fecha As DateTime
-
-        If DateTime.TryParse(valor, fecha) Then
-            Return fecha
-        End If
-
-        Return Nothing
     End Function
 
     Private Sub LimpiarFiltros()
@@ -88,11 +79,11 @@
     End Sub
 
     Private Sub MostrarMensaje(mensaje As String)
-        lblMensaje.Text = mensaje
+        MensajeHelper.ErrorSistema(lblMensaje, mensaje)
     End Sub
 
     Private Sub LimpiarMensaje()
-        lblMensaje.Text = String.Empty
+        MensajeHelper.Limpiar(lblMensaje)
     End Sub
 
 End Class

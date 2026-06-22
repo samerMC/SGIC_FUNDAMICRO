@@ -13,7 +13,11 @@
         phMenuUsuarios.Visible = sesionActiva AndAlso SesionHelper.UsuarioEsAdministrador()
 
         If sesionActiva Then
-            lblUsuarioSesion.Text = SesionHelper.ObtenerNombreCompleto()
+            lblUsuarioSesion.Text = String.Format(
+            "{0} | Rol: {1}",
+            SesionHelper.ObtenerNombreCompleto(),
+            SesionHelper.ObtenerNombreRol()
+        )
         Else
             lblUsuarioSesion.Text = String.Empty
         End If

@@ -23,6 +23,15 @@ Partial Public Class Usuarios
     Protected WithEvents hfIdUsuario As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
+    '''Control hfIdUsuarioCambiarEstado.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents hfIdUsuarioCambiarEstado As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
     '''Control txtNombreUsuario.
     '''</summary>
     '''<remarks>
@@ -120,4 +129,13 @@ Partial Public Class Usuarios
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents gvUsuarios As Global.System.Web.UI.WebControls.GridView
+
+    '''<summary>
+    '''Control btnConfirmarCambiarEstado.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnConfirmarCambiarEstado As Global.System.Web.UI.WebControls.Button
 End Class

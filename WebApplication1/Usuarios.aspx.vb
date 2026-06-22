@@ -47,10 +47,10 @@
 
             If esNuevo Then
                 _usuarioDAL.Insertar(usuario, SesionHelper.ObtenerIdUsuario())
-                MostrarMensaje("Usuario creado correctamente.")
+                MostrarExito("Usuario creado correctamente.")
             Else
                 _usuarioDAL.Actualizar(usuario, cambiarPassword, SesionHelper.ObtenerIdUsuario())
-                MostrarMensaje("Usuario actualizado correctamente.")
+                MostrarExito("Usuario actualizado correctamente.")
             End If
 
             CargarUsuarios()
@@ -66,6 +66,7 @@
         PrepararNuevoUsuario()
     End Sub
 
+    ' Este evento maneja tanto la edición como el cambio de estado de los usuarios. Se identifica la acción a través del CommandName y se obtiene el IdUsuario desde CommandArgument.
     Protected Sub gvUsuarios_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvUsuarios.RowCommand
         Dim idUsuario As Integer
 
@@ -136,45 +137,63 @@
         Try
             _usuarioDAL.CambiarEstado(usuario.IdUsuario, Not usuario.Estado, SesionHelper.ObtenerIdUsuario())
             CargarUsuarios()
-            MostrarMensaje("Estado del usuario actualizado correctamente.")
+            MostrarExito("Estado del usuario actualizado correctamente.")
 
         Catch ex As Exception
             MostrarMensaje("No fue posible cambiar el estado del usuario.")
         End Try
     End Sub
 
+    ' Este método valida que los datos ingresados en el formulario sean correctos antes de intentar guardarlos en la base de datos.
+    ' También maneja validaciones específicas para la contraseña solo si se está creando un nuevo usuario o si se ha ingresado una nueva contraseña para un usuario existente.
     Private Function DatosValidos() As Boolean
         Dim idUsuario As Integer = ObtenerIdUsuarioFormulario()
         Dim esNuevo As Boolean = idUsuario = 0
+        Dim mensajeContrasena As String = String.Empty
 
-        If String.IsNullOrWhiteSpace(txtNombreUsuario.Text) Then
-            MostrarMensaje("Debe ingresar el nombre de usuario.")
+        If Not ValidacionHelper.TextoObligatorio(txtNombreUsuario.Text) Then
+            MensajeHelper.Advertencia(lblMensaje, "Debe ingresar el nombre de usuario.")
             Return False
         End If
 
-        If String.IsNullOrWhiteSpace(txtNombreCompleto.Text) Then
-            MostrarMensaje("Debe ingresar el nombre completo.")
+        If Not ValidacionHelper.NombreUsuarioValido(txtNombreUsuario.Text) Then
+            MensajeHelper.Advertencia(lblMensaje, "El usuario debe tener entre 3 y 50 caracteres. Use solo letras, números, punto, guion o guion bajo.")
             Return False
         End If
 
-        If ddlRol.SelectedValue = String.Empty Then
-            MostrarMensaje("Debe seleccionar un rol.")
+        If Not ValidacionHelper.TextoObligatorio(txtNombreCompleto.Text) Then
+            MensajeHelper.Advertencia(lblMensaje, "Debe ingresar el nombre completo.")
+            Return False
+        End If
+
+        If Not ValidacionHelper.LongitudMaxima(txtNombreCompleto.Text, 150) Then
+            MensajeHelper.Advertencia(lblMensaje, "El nombre completo no debe superar los 150 caracteres.")
+            Return False
+        End If
+
+        If Not ValidacionHelper.CorreoValido(txtCorreo.Text) Then
+            MensajeHelper.Advertencia(lblMensaje, "Debe ingresar un correo electrónico válido.")
+            Return False
+        End If
+
+        If String.IsNullOrWhiteSpace(ddlRol.SelectedValue) Then
+            MensajeHelper.Advertencia(lblMensaje, "Debe seleccionar un rol.")
             Return False
         End If
 
         If esNuevo AndAlso String.IsNullOrWhiteSpace(txtContrasena.Text) Then
-            MostrarMensaje("Debe ingresar una contraseña para el nuevo usuario.")
+            MensajeHelper.Advertencia(lblMensaje, "Debe ingresar una contraseña para el nuevo usuario.")
             Return False
         End If
 
         If Not String.IsNullOrWhiteSpace(txtContrasena.Text) Then
-            If txtContrasena.Text.Length < 8 Then
-                MostrarMensaje("La contraseña debe tener al menos 8 caracteres.")
+            If Not ValidacionHelper.ContrasenaSegura(txtContrasena.Text, mensajeContrasena) Then
+                MensajeHelper.Advertencia(lblMensaje, mensajeContrasena)
                 Return False
             End If
 
             If txtContrasena.Text <> txtConfirmarContrasena.Text Then
-                MostrarMensaje("La contraseña y la confirmación no coinciden.")
+                MensajeHelper.Advertencia(lblMensaje, "La contraseña y la confirmación no coinciden.")
                 Return False
             End If
         End If
@@ -218,11 +237,26 @@
     End Sub
 
     Private Sub MostrarMensaje(mensaje As String)
-        lblMensaje.Text = mensaje
+        MensajeHelper.ErrorSistema(lblMensaje, mensaje)
+    End Sub
+
+    Private Sub MostrarExito(mensaje As String)
+        MensajeHelper.Exito(lblMensaje, mensaje)
     End Sub
 
     Private Sub LimpiarMensaje()
-        lblMensaje.Text = String.Empty
+        MensajeHelper.Limpiar(lblMensaje)
+    End Sub
+
+    Protected Sub btnConfirmarCambiarEstado_Click(sender As Object, e As EventArgs) Handles btnConfirmarCambiarEstado.Click
+        Dim idUsuario As Integer
+
+        If Not Integer.TryParse(hfIdUsuarioCambiarEstado.Value, idUsuario) Then
+            MostrarMensaje("No fue posible identificar el usuario seleccionado.")
+            Return
+        End If
+
+        CambiarEstadoUsuario(idUsuario)
     End Sub
 
 End Class

@@ -93,6 +93,7 @@ Public Class BitacoraDAL
         Return bitacoras
     End Function
 
+    ' Mapea un registro del SqlDataReader a un objeto Bitacora
     Private Shared Function MapearBitacora(lector As SqlDataReader) As Bitacora
         Return New Bitacora With {
             .IdBitacora = Convert.ToInt32(lector("IdBitacora")),
@@ -107,6 +108,7 @@ Public Class BitacoraDAL
         }
     End Function
 
+    ' Convierte una cadena vacía o nula a DBNull.Value para parámetros SQL, o devuelve la cadena limpia
     Private Shared Function ObtenerValorNullable(valor As String) As Object
         If String.IsNullOrWhiteSpace(valor) Then
             Return DBNull.Value

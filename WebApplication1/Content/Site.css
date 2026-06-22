@@ -166,3 +166,205 @@ textarea {
     color: #1b6e1b;
     font-weight: 600;
 }
+
+/* Mensajes del sistema */
+.app-message {
+    display: none;
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.app-message-success {
+    display: block;
+    color: #1b5e20;
+    background: #e8f5e9;
+    border: 1px solid #a5d6a7;
+}
+
+.app-message-error {
+    display: block;
+    color: #7f0000;
+    background: #ffebee;
+    border: 1px solid #ef9a9a;
+}
+
+.app-message-warning {
+    display: block;
+    color: #6d4c00;
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+}
+
+/* Compatibilidad con clases usadas en ramas anteriores */
+.validation-message {
+    display: block;
+    margin-top: 10px;
+    color: #7f0000;
+    font-weight: 600;
+}
+
+.success-message {
+    display: block;
+    margin-top: 10px;
+    color: #1b5e20;
+    font-weight: 600;
+}
+
+/* Mejoras visuales generales */
+.form-control {
+    max-width: 100%;
+}
+
+.text-muted {
+    color: #666;
+}
+
+.data-table {
+    font-size: 14px;
+}
+
+    .data-table a {
+        margin-right: 8px;
+        font-weight: 600;
+    }
+
+.danger-link {
+    color: #b00020;
+}
+
+.navbar-text {
+    margin-left: 16px;
+    font-weight: 600;
+    color: #555;
+}
+
+.form-hint {
+    margin-top: 6px;
+    color: #666;
+    font-size: 13px;
+}
+
+.required-note {
+    margin-top: 8px;
+    color: #666;
+    font-size: 13px;
+}
+
+/* Modal personalizado del sistema */
+.app-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1050;
+}
+
+    .app-modal-overlay.is-visible {
+        display: flex;
+    }
+
+.app-modal {
+    width: 100%;
+    max-width: 460px;
+    padding: 24px;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+}
+
+    .app-modal h2 {
+        margin-top: 0;
+        margin-bottom: 12px;
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    .app-modal p {
+        margin-bottom: 12px;
+    }
+
+.app-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-danger {
+    color: #ffffff;
+    background-color: #b00020;
+    border-color: #b00020;
+}
+
+.btn-danger:hover {
+    color: #ffffff;
+    background-color: #8c001a;
+    border-color: #8c001a;
+}
+
+/* Acciones de tablas */
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.action-link {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+    .action-link:hover {
+        text-decoration: none;
+    }
+
+.action-edit {
+    color: #0d47a1;
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+}
+
+    .action-edit:hover {
+        color: #ffffff;
+        background-color: #0d47a1;
+        border-color: #0d47a1;
+    }
+
+.action-danger {
+    color: #b00020;
+    background-color: #ffebee;
+    border-color: #ef9a9a;
+}
+
+    .action-danger:hover {
+        color: #ffffff;
+        background-color: #b00020;
+        border-color: #b00020;
+    }
+
+.action-success {
+    color: #1b5e20;
+    background-color: #e8f5e9;
+    border-color: #a5d6a7;
+}
+
+.action-success:hover {
+    color: #ffffff;
+    background-color: #1b5e20;
+    border-color: #1b5e20;
+}

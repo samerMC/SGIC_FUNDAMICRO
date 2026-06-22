@@ -23,6 +23,15 @@ Partial Public Class Clientes
     Protected WithEvents hfIdCliente As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
+    '''Control hfIdClienteEliminar.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents hfIdClienteEliminar As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
     '''Control txtNombre.
     '''</summary>
     '''<remarks>
@@ -120,4 +129,13 @@ Partial Public Class Clientes
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents gvClientes As Global.System.Web.UI.WebControls.GridView
+
+    '''<summary>
+    '''Control btnConfirmarEliminar.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnConfirmarEliminar As Global.System.Web.UI.WebControls.Button
 End Class

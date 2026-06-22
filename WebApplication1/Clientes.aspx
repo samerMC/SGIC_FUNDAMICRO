@@ -12,6 +12,7 @@
             <h2>Datos del cliente</h2>
 
             <asp:HiddenField ID="hfIdCliente" runat="server" />
+            <asp:HiddenField ID="hfIdClienteEliminar" runat="server" />
 
             <div class="form-grid">
                 <div class="form-group">
@@ -59,7 +60,7 @@
             <asp:Label
                 ID="lblMensaje"
                 runat="server"
-                CssClass="validation-message"
+                CssClass="app-message"
                 EnableViewState="false" />
 
             <div class="form-actions">
@@ -89,25 +90,79 @@
 
                     <asp:TemplateField HeaderText="Acciones">
                         <ItemTemplate>
-                            <asp:LinkButton
-                                ID="lnkEditar"
-                                runat="server"
-                                Text="Editar"
-                                CommandName="EditarCliente"
-                                CommandArgument='<%# Eval("IdCliente") %>' />
+                            <div class="table-actions">
+                                <asp:LinkButton
+                                    ID="lnkEditar"
+                                    runat="server"
+                                    Text="Editar"
+                                    CommandName="EditarCliente"
+                                    CommandArgument='<%# Eval("IdCliente") %>'
+                                    CssClass="action-link action-edit" />
 
-                            <asp:LinkButton
-                                ID="lnkEliminar"
-                                runat="server"
-                                Text="Eliminar"
-                                CommandName="EliminarCliente"
-                                CommandArgument='<%# Eval("IdCliente") %>'
-                                CssClass="danger-link"
-                                OnClientClick="return confirm('¿Confirma eliminar este cliente?');" />
+                                <asp:LinkButton
+                                    ID="lnkEliminar"
+                                    runat="server"
+                                    Text="Eliminar"
+                                    CommandName="EliminarClienteModal"
+                                    CommandArgument='<%# Eval("IdCliente") %>'
+                                    CssClass="action-link action-danger"
+                                    OnClientClick='<%# String.Format("mostrarModalEliminarCliente({0}); return false;", Eval("IdCliente")) %>' />
+                            </div>
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
             </asp:GridView>
         </section>
+        <asp:Button
+            ID="btnConfirmarEliminar"
+            runat="server"
+            Text="Confirmar eliminación"
+            Style="display:none;"
+            CausesValidation="false" />
     </main>
+    <div id="modalEliminarCliente" class="app-modal-overlay" aria-hidden="true">
+        <div class="app-modal" role="dialog" aria-modal="true" aria-labelledby="modalEliminarClienteTitulo">
+            <h2 id="modalEliminarClienteTitulo">Confirmar eliminación</h2>
+
+            <p>
+                ¿Confirma que desea eliminar este cliente?
+            </p>
+
+            <p class="form-hint">
+                El registro no se eliminará físicamente; quedará desactivado para conservar trazabilidad.
+            </p>
+
+            <div class="app-modal-actions">
+                <button type="button" class="btn btn-danger" onclick="confirmarEliminarCliente();">
+                    Eliminar
+                </button>
+
+                <button type="button" class="btn btn-secondary" onclick="cerrarModalEliminarCliente();">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function mostrarModalEliminarCliente(idCliente) {
+            document.getElementById('<%= hfIdClienteEliminar.ClientID %>').value = idCliente;
+
+            const modal = document.getElementById('modalEliminarCliente');
+            modal.classList.add('is-visible');
+            modal.setAttribute('aria-hidden', 'false');
+        }
+
+        function cerrarModalEliminarCliente() {
+            const modal = document.getElementById('modalEliminarCliente');
+            modal.classList.remove('is-visible');
+            modal.setAttribute('aria-hidden', 'true');
+
+            document.getElementById('<%= hfIdClienteEliminar.ClientID %>').value = '';
+        }
+
+        function confirmarEliminarCliente() {
+            document.getElementById('<%= btnConfirmarEliminar.ClientID %>').click();
+        }
+    </script>
 </asp:Content>

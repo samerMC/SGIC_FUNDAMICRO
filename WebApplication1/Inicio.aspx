@@ -6,6 +6,9 @@
             <p>
                 Desde esta pantalla podrá acceder a las opciones principales del sistema.
             </p>
+            <p class="required-note">
+                Las opciones visibles dependen del rol asignado al usuario autenticado.
+            </p>
         </section>
 
         <section class="dashboard-grid">
