@@ -93,3 +93,91 @@ Logout.aspx
 
 Web.config
     Configuración general y cadena de conexión.
+
+## EXTRAS
+Así mismo si no se quiere ejecutar los 2 scripts que tiene el proyecto alojados en SCriptsSQL, puedes hacer backup de la base de datos utilizada
+anexo dicho backup en este repositorio.
+
+## AYUDA SOBRE LA CADENA DE CONEXION EN SQL SERVER
+## Cambio de cadena de conexión
+
+El sistema utiliza una cadena de conexión definida en el archivo Web.config para conectarse a SQL Server.
+
+La cadena de conexión se encuentra dentro del bloque:
+
+<connectionStrings>
+  <add name="ConexionDB"
+       connectionString="Data Source=DESKTOP-UB4AC9Q\SQLEXPRESS;Initial Catalog=DB_SGIC_FUNDAMICRO;Integrated Security=True;TrustServerCertificate=True;"
+       providerName="System.Data.SqlClient" />
+</connectionStrings>
+
+Si el proyecto se ejecuta en otro equipo, es posible que el nombre del servidor SQL Server sea diferente. En ese caso, se debe modificar únicamente el valor de `Data Source`.
+
+Ejemplo:
+
+Data Source=DESKTOP-UB4AC9Q\SQLEXPRESS;
+
+Debe reemplazarse por la instancia de SQL Server correspondiente al equipo donde se ejecutará el sistema.
+
+Algunos ejemplos comunes son:
+
+Data Source=.;
+Data Source=.\SQLEXPRESS;
+Data Source=localhost;
+Data Source=(localdb)\MSSQLLocalDB;
+Data Source=NOMBRE_EQUIPO\SQLEXPRESS;
+
+La propiedad Initial Catalog debe contener el nombre de la base de datos creada en SQL Server:
+
+Initial Catalog=DB_SGIC_FUNDAMICRO;
+
+Si el nombre de la base de datos se mantiene igual, no es necesario modificar esta parte.
+
+### Ejemplo usando SQL Server Express
+
+<connectionStrings>
+  <add name="ConexionDB"
+       connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=DB_SGIC_FUNDAMICRO;Integrated Security=True;TrustServerCertificate=True;"
+       providerName="System.Data.SqlClient" />
+</connectionStrings>
+
+### Ejemplo usando LocalDB
+
+<connectionStrings>
+  <add name="ConexionDB"
+       connectionString="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DB_SGIC_FUNDAMICRO;Integrated Security=True;TrustServerCertificate=True;"
+       providerName="System.Data.SqlClient" />
+</connectionStrings>
+
+### Ejemplo usando autenticación SQL Server
+
+Si se utiliza autenticación con usuario y contraseña de SQL Server, la cadena puede configurarse así:
+
+<connectionStrings>
+  <add name="ConexionDB"
+       connectionString="Data Source=SERVIDOR_SQL;Initial Catalog=DB_SGIC_FUNDAMICRO;User ID=USUARIO_SQL;Password=CONTRASENA_SQL;TrustServerCertificate=True;"
+       providerName="System.Data.SqlClient" />
+</connectionStrings>
+
+En ese caso, se debe reemplazar:
+
+SERVIDOR_SQL
+USUARIO_SQL
+CONTRASENA_SQL
+
+por los datos reales del servidor.
+
+Por seguridad, se recomienda no subir contraseñas reales al repositorio si se utiliza autenticación SQL Server.
+
+### Cómo saber el nombre del servidor en SSMS
+
+Para identificar el servidor correcto, abrir SQL Server Management Studio y revisar el campo Server name al momento de conectarse.
+
+También se puede ejecutar la siguiente consulta:
+
+SELECT @@SERVERNAME AS NombreServidor;
+
+El resultado puede utilizarse como referencia para configurar el valor de Data Source en Web.config.
+
+Después de modificar la cadena de conexión, se debe guardar el archivo Web.config, compilar nuevamente la solución y ejecutar el sistema para verificar que la conexión funcione correctamente.
+
