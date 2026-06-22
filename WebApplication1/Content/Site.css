@@ -159,3 +159,10 @@ textarea {
         flex-direction: column;
     }
 }
+
+.success-message {
+    display: block;
+    margin-top: 10px;
+    color: #1b6e1b;
+    font-weight: 600;
+}

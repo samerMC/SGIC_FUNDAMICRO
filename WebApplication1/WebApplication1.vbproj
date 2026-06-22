@@ -243,6 +243,7 @@
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="Datos\ClienteDAL.vb" />
     <Compile Include="Datos\ConexionBD.vb" />
     <Compile Include="Datos\RolDAL.vb" />
     <Compile Include="Datos\UsuarioDAL.vb" />
@@ -278,6 +279,7 @@
       <DependentUpon>Logout.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="Modelos\Cliente.vb" />
     <Compile Include="Modelos\Rol.vb" />
     <Compile Include="Modelos\Usuario.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

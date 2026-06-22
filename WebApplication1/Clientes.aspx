@@ -30,6 +30,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="txtNit">NIT</label>
+                    <asp:TextBox ID="txtNit" runat="server" CssClass="form-control" MaxLength="20" />
+                </div>
+
+                <div class="form-group">
                     <label for="txtTelefono">Teléfono</label>
                     <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control" MaxLength="20" />
                 </div>
@@ -41,60 +46,64 @@
 
                 <div class="form-group form-group-full">
                     <label for="txtDireccion">Dirección</label>
-                    <asp:TextBox 
-                        ID="txtDireccion" 
-                        runat="server" 
-                        CssClass="form-control" 
-                        TextMode="MultiLine" 
-                        Rows="3" 
+                    <asp:TextBox
+                        ID="txtDireccion"
+                        runat="server"
+                        CssClass="form-control"
+                        TextMode="MultiLine"
+                        Rows="3"
                         MaxLength="250" />
                 </div>
             </div>
 
-            <asp:Label 
-                ID="lblMensaje" 
-                runat="server" 
-                CssClass="validation-message" 
+            <asp:Label
+                ID="lblMensaje"
+                runat="server"
+                CssClass="validation-message"
                 EnableViewState="false" />
 
             <div class="form-actions">
                 <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-primary" />
-                <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-secondary" />
+                <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-secondary" CausesValidation="false" />
             </div>
         </section>
 
         <section class="table-panel">
             <h2>Clientes registrados</h2>
 
-            <asp:GridView 
-                ID="gvClientes" 
-                runat="server" 
-                CssClass="data-table" 
-                AutoGenerateColumns="False" 
+            <asp:GridView
+                ID="gvClientes"
+                runat="server"
+                CssClass="data-table"
+                AutoGenerateColumns="False"
                 EmptyDataText="No hay clientes registrados.">
 
                 <Columns>
                     <asp:BoundField DataField="IdCliente" HeaderText="ID" />
-                    <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
-                    <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
+                    <asp:BoundField DataField="NombreCompleto" HeaderText="Cliente" />
                     <asp:BoundField DataField="Dui" HeaderText="DUI" />
+                    <asp:BoundField DataField="Nit" HeaderText="NIT" />
                     <asp:BoundField DataField="Telefono" HeaderText="Teléfono" />
                     <asp:BoundField DataField="Correo" HeaderText="Correo" />
+                    <asp:BoundField DataField="EstadoTexto" HeaderText="Estado" />
 
                     <asp:TemplateField HeaderText="Acciones">
                         <ItemTemplate>
-                            <asp:LinkButton 
-                                ID="lnkEditar" 
-                                runat="server" 
-                                Text="Editar" 
-                                CommandName="EditarCliente" />
+                            <asp:LinkButton
+                                ID="lnkEditar"
+                                runat="server"
+                                Text="Editar"
+                                CommandName="EditarCliente"
+                                CommandArgument='<%# Eval("IdCliente") %>' />
 
-                            <asp:LinkButton 
-                                ID="lnkEliminar" 
-                                runat="server" 
-                                Text="Eliminar" 
-                                CommandName="EliminarCliente" 
-                                CssClass="danger-link" />
+                            <asp:LinkButton
+                                ID="lnkEliminar"
+                                runat="server"
+                                Text="Eliminar"
+                                CommandName="EliminarCliente"
+                                CommandArgument='<%# Eval("IdCliente") %>'
+                                CssClass="danger-link"
+                                OnClientClick="return confirm('¿Confirma eliminar este cliente?');" />
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
