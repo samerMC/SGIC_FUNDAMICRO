@@ -5,6 +5,7 @@ Public Class Clientes
     Inherits System.Web.UI.Page
 
     Private ReadOnly _clienteDAL As New ClienteDAL()
+    Private ReadOnly _bitacoraDAL As New BitacoraDAL()
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not SesionHelper.ValidarAcceso() Then
@@ -36,10 +37,24 @@ Public Class Clientes
             Dim cliente As Cliente = CrearClienteDesdeFormulario(idCliente)
 
             If esNuevo Then
-                _clienteDAL.Insertar(cliente, SesionHelper.ObtenerIdUsuario())
+                Dim idClienteCreado As Integer = _clienteDAL.Insertar(cliente, SesionHelper.ObtenerIdUsuario())
+
+                RegistrarBitacora(
+                    "AGREGAR",
+                    idClienteCreado,
+                    String.Format("Se agregó el cliente {0}.", cliente.NombreCompleto)
+                )
+
                 MostrarMensaje("Cliente creado correctamente.", False)
             Else
                 _clienteDAL.Actualizar(cliente, SesionHelper.ObtenerIdUsuario())
+
+                RegistrarBitacora(
+                    "EDITAR",
+                    cliente.IdCliente,
+                    String.Format("Se actualizó la información del cliente {0}.", cliente.NombreCompleto)
+                )
+
                 MostrarMensaje("Cliente actualizado correctamente.", False)
             End If
 
@@ -108,6 +123,12 @@ Public Class Clientes
 
         Try
             _clienteDAL.EliminarLogico(idCliente, SesionHelper.ObtenerIdUsuario())
+
+            RegistrarBitacora(
+                "ELIMINAR",
+                cliente.IdCliente,
+                String.Format("Se eliminó el cliente {0}.", cliente.NombreCompleto)
+            )
 
             CargarClientes()
             PrepararNuevoCliente()
@@ -204,5 +225,28 @@ Public Class Clientes
         lblMensaje.Text = String.Empty
         lblMensaje.CssClass = "validation-message"
     End Sub
+
+    Private Sub RegistrarBitacora(accion As String, idCliente As Integer, detalle As String)
+        Dim bitacora As New Bitacora With {
+            .Accion = accion,
+            .IdCliente = idCliente,
+            .IdUsuario = SesionHelper.ObtenerIdUsuario(),
+            .NombreUsuario = SesionHelper.ObtenerNombreUsuario(),
+            .Detalle = detalle,
+            .IpOrigen = ObtenerIpOrigen()
+        }
+
+        _bitacoraDAL.Registrar(bitacora)
+    End Sub
+
+    Private Function ObtenerIpOrigen() As String
+        Dim ipProxy As String = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
+
+        If Not String.IsNullOrWhiteSpace(ipProxy) Then
+            Return ipProxy.Split(","c)(0).Trim()
+        End If
+
+        Return Request.UserHostAddress
+    End Function
 
 End Class
